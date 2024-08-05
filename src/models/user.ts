@@ -1,4 +1,4 @@
-class user{
+export  class user{
     id:number;
     username:string;
     phone:number;
