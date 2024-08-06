@@ -1,5 +1,5 @@
 import { user } from "../models/user";
-class UserService{
+export default class UserService{
     public user: user[]=[];
     public addUser(user: user): void {
         this.user.push(user);

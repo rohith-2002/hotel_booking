@@ -1,4 +1,4 @@
-export class hotel{
+export default class hotel{
     id :number;
     name:string;
     address:string;
