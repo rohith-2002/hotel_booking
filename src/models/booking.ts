@@ -1,4 +1,4 @@
-class bookings{
+export class booking{
     bookingId: number;
     bookingDate: string;
     checkInDate: string;
