@@ -9,6 +9,8 @@ const booking_1 = require("./models/booking");
 const userservices_1 = __importDefault(require("./services/userservices"));
 const hotelservices_1 = __importDefault(require("./services/hotelservices"));
 const bookingservices_1 = __importDefault(require("./services/bookingservices"));
+const prompt_sync_1 = __importDefault(require("prompt-sync"));
+const prompt = (0, prompt_sync_1.default)();
 const hotelService = new hotelservices_1.default();
 const hotel1 = new hotel_1.default(1, "Taj", "Mumbai", 10);
 const hotel2 = new hotel_1.default(2, "Oberoi", "Delhi", 5);
@@ -35,7 +37,8 @@ function bookroom(bookingId, checkInDate, checkOutDate, userId, hotelId) {
         console.log("Hotel not found");
         return;
     }
-    if (photel.rooms == 0 && photel.rooms < 0) {
+    const avlrooms = getavaIlablerooms(hotelId, checkInDate);
+    if (avlrooms <= 0) {
         console.log("Rooms are not available");
     }
     const bookings = bookingService.getBookings();
@@ -82,3 +85,35 @@ bookroom(2, new Date(2021, 11, 2), new Date(2021, 11, 6), 2, 2);
 bookroom(3, new Date(2021, 11, 3), new Date(2021, 11, 7), 3, 3);
 bookroom(4, new Date(2021, 11, 4), new Date(2021, 11, 8), 4, 4);
 getavaIlablerooms(1, new Date(2021, 11, 1));
+function avaliblerooms() {
+    const hotel = hotelService.getHotels();
+    for (let i = 0; i < hotel.length; i++) {
+        console.log("Hotel Name: " + hotel[i].name);
+        console.log("Available rooms: " + hotel[i].rooms);
+    }
+}
+function checkuseravaliable(username) {
+    const user = userService.getUsers();
+    for (let i = 0; i < user.length; i++) {
+        if (user[i].username === username) {
+            return user[i].id;
+        }
+    }
+    return -1;
+}
+avaliblerooms();
+console.log("please enter the bookings details");
+const bookingID = Math.floor(Math.random() * 1000);
+const checkInDate = new Date(prompt("Enter check in date: "));
+console.log(`checkin date :, ${checkInDate}!`);
+const checkOutDate = new Date(prompt("Enter check out date: "));
+console.log(`checkout date :, ${checkOutDate}!`);
+const username = (prompt("Enter username: "));
+console.log(`user id :, ${username}!`);
+if (checkuseravaliable(username) === -1) {
+    console.log("User not found");
+}
+const userId = checkuseravaliable(username);
+const hotelId = parseInt(prompt("Enter hotel id: "));
+console.log(`hotel id :, ${hotelId}!`);
+bookroom(bookingID, checkInDate, checkOutDate, userId, hotelId);
