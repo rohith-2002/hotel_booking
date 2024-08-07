@@ -10,6 +10,7 @@ const userservices_1 = __importDefault(require("./services/userservices"));
 const hotelservices_1 = __importDefault(require("./services/hotelservices"));
 const bookingservices_1 = __importDefault(require("./services/bookingservices"));
 const prompt_sync_1 = __importDefault(require("prompt-sync"));
+const logger_1 = require("./logger/logger");
 const prompt = (0, prompt_sync_1.default)();
 const hotelService = new hotelservices_1.default();
 const hotel1 = new hotel_1.default(1, "Taj", "Mumbai", 10);
@@ -35,6 +36,7 @@ function bookroom(bookingId, checkInDate, checkOutDate, userId, hotelId) {
     const puser = userService.getUserbyId(userId);
     if (photel === undefined) {
         console.log("Hotel not found");
+        logger_1.logger.error("tried to book in a hotel that does not exist");
         return;
     }
     const avlrooms = getavaIlablerooms(hotelId, checkInDate);
@@ -46,6 +48,7 @@ function bookroom(bookingId, checkInDate, checkOutDate, userId, hotelId) {
         if (bookings[i].userId === userId) {
             if ((checkInDate >= bookings[i].checkInDate && checkInDate <= bookings[i].checkOutDate) || (checkOutDate >= bookings[i].checkInDate && checkOutDate <= bookings[i].checkOutDate)) {
                 console.log("Room is already booked");
+                logger_1.logger.error("tried to book a room that is already booked");
                 return;
             }
         }
@@ -54,12 +57,14 @@ function bookroom(bookingId, checkInDate, checkOutDate, userId, hotelId) {
     bookingService.addBooking(pbooking);
     photel.rooms = photel.rooms - 1;
     console.log("Room booked successfully");
+    logger_1.logger.info("Room booked successfully");
 }
 ;
 function getBookingsByHotelId(id) {
     const hotel = hotelService.getHotelbyId(id);
     if (hotel === undefined) {
         console.log("Hotel not found");
+        logger_1.logger.error("tried to get bookings of a hotel that does not exist");
         return;
     }
     const bookings = bookingService.getBookings();
@@ -69,6 +74,7 @@ function getavaIlablerooms(id, date) {
     const hotel = hotelService.getHotelbyId(id);
     if (hotel === undefined) {
         console.log("Hotel not found");
+        logger_1.logger.error("tried to get available rooms of a hotel that does not exist");
         return;
     }
     const bookings = getBookingsByHotelId(id);

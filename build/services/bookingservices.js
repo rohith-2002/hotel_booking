@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const logger_1 = require("../logger/logger");
 class bookingservices {
     constructor() {
         this.booking = [];
@@ -16,6 +17,7 @@ class bookingservices {
     }
     addBooking(booking) {
         this.booking.push(booking);
+        logger_1.logger.info("booking added");
     }
     getBookingbyId(id) {
         console.log(this.booking.find(booking => booking.bookingId === id));
@@ -30,6 +32,7 @@ class bookingservices {
             this.booking.splice(index, 1);
         }
         console.log(this.booking);
+        logger_1.logger.info("booking removed");
     }
     updateBooking(newbooking, id) {
         const index = this.booking.findIndex(booking => booking.bookingId === id);
@@ -37,6 +40,7 @@ class bookingservices {
             this.booking[index] = newbooking;
         }
         console.log("booking ubdated");
+        logger_1.logger.info("booking updated");
     }
 }
 exports.default = bookingservices;
